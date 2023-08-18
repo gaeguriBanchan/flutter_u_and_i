@@ -104,36 +104,23 @@ class _MainPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final now = DateTime.now();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const Text(
+        Text(
           'U&I',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'parisienne',
-            fontSize: 80.0,
-          ),
+          style: textTheme.headlineLarge,
         ),
         Column(
           children: [
-            const Text(
-              '우리 처음 만난날',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'sunflower',
-                fontSize: 30.0,
-              ),
-            ),
+            Text('우리 처음 만난날', style: theme.textTheme.bodyLarge),
             Text(
               '${selectedDate.year}.${selectedDate.month}.${selectedDate.day}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontFamily: 'sunflower',
-                fontSize: 20.0,
-              ),
+              style: textTheme.bodyMedium,
             ),
           ],
         ),
@@ -151,11 +138,7 @@ class _MainPart extends StatelessWidget {
                 now.month,
                 now.day,
               ).difference(selectedDate).inDays + 1}',
-          style: const TextStyle(
-              color: Colors.white,
-              fontFamily: 'sunflower',
-              fontSize: 50.0,
-              fontWeight: FontWeight.w700),
+          style: textTheme.headlineMedium,
         )
       ],
     );
