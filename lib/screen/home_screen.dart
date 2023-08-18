@@ -9,6 +9,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,9 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height,
                   ),
                 ),
-                const Flexible(
+                Flexible(
                   flex: 50,
-                  child: _MainPart(),
+                  child: _MainPart(
+                    selectedDate: selectedDate,
+                    onPressed: onHeartPressed,
+                  ),
                 ),
                 Flexible(
                   flex: 45,
@@ -49,13 +58,54 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  onHeartPressed() {
+    final now = DateTime.now();
+    // dialog
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Align(
+          // 정렬할 위치를 정해줘야 거기를 기준으로 높이를 형성
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            color: Colors.white,
+            height: 300,
+            child: CupertinoDatePicker(
+              initialDateTime: selectedDate,
+              maximumDate: DateTime(
+                now.year,
+                now.month,
+                now.day,
+              ),
+              mode: CupertinoDatePickerMode.date,
+              onDateTimeChanged: (DateTime date) {
+                setState(() {
+                  selectedDate = date;
+                });
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _MainPart extends StatelessWidget {
-  const _MainPart();
+  final DateTime selectedDate;
+  final VoidCallback onPressed;
+
+  const _MainPart({
+    required this.selectedDate,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -67,9 +117,9 @@ class _MainPart extends StatelessWidget {
             fontSize: 80.0,
           ),
         ),
-        const Column(
+        Column(
           children: [
-            Text(
+            const Text(
               '우리 처음 만난날',
               style: TextStyle(
                 color: Colors.white,
@@ -78,8 +128,8 @@ class _MainPart extends StatelessWidget {
               ),
             ),
             Text(
-              '2023.03.29',
-              style: TextStyle(
+              '${selectedDate.year}.${selectedDate.month}.${selectedDate.day}',
+              style: const TextStyle(
                 color: Colors.white,
                 fontFamily: 'sunflower',
                 fontSize: 20.0,
@@ -89,37 +139,19 @@ class _MainPart extends StatelessWidget {
         ),
         IconButton(
           iconSize: 60.0,
-          onPressed: () {
-            // dialog
-            showCupertinoDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return Align(
-                  // 정렬할 위치를 정해줘야 거기를 기준으로 높이를 형성
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    color: Colors.white,
-                    height: 300,
-                    child: CupertinoDatePicker(
-                      mode: CupertinoDatePickerMode.date,
-                      onDateTimeChanged: (DateTime date) {
-                        print(date);
-                      },
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+          onPressed: onPressed,
           icon: const Icon(
             Icons.favorite,
             color: Colors.red,
           ),
         ),
-        const Text(
-          'D+1',
-          style: TextStyle(
+        Text(
+          'D+${DateTime(
+                now.year,
+                now.month,
+                now.day,
+              ).difference(selectedDate).inDays + 1}',
+          style: const TextStyle(
               color: Colors.white,
               fontFamily: 'sunflower',
               fontSize: 50.0,
