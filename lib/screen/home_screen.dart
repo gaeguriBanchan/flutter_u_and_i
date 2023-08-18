@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -88,7 +89,29 @@ class _MainPart extends StatelessWidget {
         ),
         IconButton(
           iconSize: 60.0,
-          onPressed: () {},
+          onPressed: () {
+            // dialog
+            showCupertinoDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return Align(
+                  // 정렬할 위치를 정해줘야 거기를 기준으로 높이를 형성
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    color: Colors.white,
+                    height: 300,
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      onDateTimeChanged: (DateTime date) {
+                        print(date);
+                      },
+                    ),
+                  ),
+                );
+              },
+            );
+          },
           icon: const Icon(
             Icons.favorite,
             color: Colors.red,
